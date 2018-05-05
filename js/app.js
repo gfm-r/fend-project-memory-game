@@ -1,8 +1,12 @@
 /*
  * Create a list that holds all of your cards
  */
-let corent = null,
-  nextCorent = null;
+let arr = new Array(null, null);
+/*
+arr[0]=اول بطاقة يتم الضغط عليها
+arr[1]=البطاقة الثانية التي يتم الضغط عليها
+*/
+Shuffled = null; //shuffle متغير بداخلة المصفوفة الناتجة من
 let diamond = 0,
   paper = 0,
   anchor = 0,
@@ -32,36 +36,41 @@ function shuffle(array) {
 
   return array;
 }
-//shuffle متغير بداخلة المصفوفة الناتجة من
-let get_Shuffle = shuffle(Array.from(document.querySelectorAll(".card")));
 //shuffleدالة تستخدم عند اضافة البطائق المعاد ترتيبها من
 //DOMلإضافة العناصر الجديدة الى الـ
-function refresh_Page(arr) {
+
+function refresh_Page() {
+  Shuffled = shuffle(Array.from(document.querySelectorAll(".card")));
+  arr[0] = null,
+    arr[1] = null;
   let x = document.querySelector(".deck");
   x.textContent = "";
-  for (var i = 0; i < arr.length; i++)
-    x.appendChild(arr[i]);
+  for (let i = 0; i < Shuffled.length; i++) {
+    Shuffled[i].className = "card"
+    x.appendChild(Shuffled[i]);
+
+  }
 }
 //دالة التحقق من البطاقة المحددة
 function check(env) {
-  if (corent === null) {
-    corent = env.target.firstElementChild;
-    corent.parentElement.classList.add('open', 'show');
-  } else if (nextCorent === null) {
-    nextCorent = env.target.firstElementChild;
-    if (corent.className === nextCorent.className) {
-      nextCorent.parentElement.classList.add('match');
-      corent.parentElement.classList.add('match');
-      corent = null; //
-      nextCorent = null; //
-    } else {
-      nextCorent.parentElement.classList.add('wrong');
-      corent.parentElement.classList.add('wrong');
+  if (arr[0] === null) {
+    arr[0] = env.target.firstElementChild;
+    arr[0].parentElement.classList.add('open', 'show');
+  } else if (arr[1] === null) {
+    arr[1] = env.target.firstElementChild;
+    if ((arr[0].className === arr[1].className) & arr[1].className != null) {
+      arr[1].parentElement.classList.add('match');
+      arr[0].parentElement.classList.add('match');
+      arr[0] = null; //
+      arr[1] = null; //
+    } else if (arr[1].className != null & arr[0].className != null) {
+      arr[1].parentElement.classList.add('wrong');
+      arr[0].parentElement.classList.add('wrong');
       setTimeout(function() {
-        nextCorent.parentElement.classList.remove('show', 'open', 'wrong');
-        corent.parentElement.classList.remove('show', 'open', 'wrong');
-        corent = null; //
-        nextCorent = null; //
+        arr[1].parentElement.classList.remove('show', 'open', 'wrong');
+        arr[0].parentElement.classList.remove('show', 'open', 'wrong');
+        arr[0] = null; //
+        arr[1] = null; //
       }, 1000);
 
     }
@@ -69,58 +78,21 @@ function check(env) {
   }
 
 }
-
-//* set up the event listener for a card. If a card is clicked:
-for (var i = 0; i < get_Shuffle.length; i++) {
-  get_Shuffle[i].parentElement.addEventListener('click', check);
+/*
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
+refresh_Page();
+for (var i = 0; i < Shuffled.length; i++) {
+  Shuffled[i].parentElement.addEventListener('click', check);
 }
-refresh_Page(get_Shuffle);
-
-// getCards.addEventListener('click', check);
-
-
-//*  - display the card's symbol (put this functionality in another function that you call from this one)
-
-
-
-
-
-//*  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
-
-
-
-
-
-
-//*  - if the list already has another card, check to see if the two cards match
-
-
-
-
-
-
-//*    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
-
-
-
-
-
-
-
-//*    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
-
-
-
-
-
-
-
-//*    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
-
-
-
-
-
-
-
-//*    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+let restart_Button = document.querySelector('.restart');
+restart_Button.addEventListener('click', function() {
+  refresh_Page();
+});
