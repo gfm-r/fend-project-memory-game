@@ -17,7 +17,6 @@ let diamond = 0,
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
   var currentIndex = array.length,
@@ -33,19 +32,17 @@ function shuffle(array) {
 
   return array;
 }
-
-
-
-
+//shuffle متغير بداخلة المصفوفة الناتجة من
 let get_Shuffle = shuffle(Array.from(document.querySelectorAll(".card")));
-
+//shuffleدالة تستخدم عند اضافة البطائق المعاد ترتيبها من
+//DOMلإضافة العناصر الجديدة الى الـ
 function refresh_Page(arr) {
   let x = document.querySelector(".deck");
   x.textContent = "";
   for (var i = 0; i < arr.length; i++)
     x.appendChild(arr[i]);
 }
-
+//دالة التحقق من البطاقة المحددة
 function check(env) {
   if (corent === null) {
     corent = env.target.firstElementChild;
@@ -74,9 +71,6 @@ function check(env) {
 }
 
 //* set up the event listener for a card. If a card is clicked:
-
-
-
 for (var i = 0; i < get_Shuffle.length; i++) {
   get_Shuffle[i].parentElement.addEventListener('click', check);
 }
