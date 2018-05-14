@@ -1,7 +1,9 @@
-/*
- * Create a list that holds all of your cards
- */
 let arr = new Array(null, null);
+let moves = document.querySelector('.moves');
+let deck = document.querySelector(".deck");
+let num_Wrong = 0;
+let num_Win = 0;
+let my_Stars = Array.from(document.querySelectorAll('.fa-star'));
 /*
 arr[0]=اول بطاقة يتم الضغط عليها
 arr[1]=البطاقة الثانية التي يتم الضغط عليها
@@ -33,50 +35,72 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 }
-//shuffleدالة تستخدم عند اضافة البطائق المعاد ترتيبها من
-//DOMلإضافة العناصر الجديدة الى الـ
-
+//لنقوم بتحويل العناصر الناتجة من نوع Array.fromنستخدم الدالة
+//الى مصفوفة Element
 function refresh_Page() {
   Shuffled = shuffle(Array.from(document.querySelectorAll(".card")));
-  arr[0] = null,
-    arr[1] = null;
-  let x = document.querySelector(".deck");
-  x.textContent = "";
+  //DOMبعد اعادة ترتيب البطائق نقوم بإضافتها الى الـ
+  //فهي ليست موجودة بعد داخل الصفحة
   for (let i = 0; i < Shuffled.length; i++) {
-    Shuffled[i].className = "card"
-    x.appendChild(Shuffled[i]);
-
+    deck.appendChild(Shuffled[i]);
   }
 }
-//دالة التحقق من البطاقة المحددة
+
+function update_Score(win, wrong) {
+  moves.innerText++;
+  if (wrong)
+    num_Wrong++;
+  else if (win)
+    num_Win++;
+  if (num_Wrong === 2)
+    my_Stars[2].className = 'fa fa-star-half-o';
+  else if (num_Wrong === 4) {
+    my_Stars[2].className = 'fa fa-star-o';
+  } else if (num_Wrong === 6)
+    my_Stars[1].className = 'fa fa-star-half-o';
+  else if (num_Wrong === 8)
+    my_Stars[1].className = 'fa fa-star-o';
+  if (num_Win === 16) {
+    ////////////swal-alert//////////////////////////
+    swal({
+      title: "Congratulation! You Won!",
+      text: "with " + moves.innerText + " Moves and Stars",
+      icon: "success",
+      button: "Play again!",
+    }).then(function() {
+      window.location.reload();
+    });
+    //////////////////////////////////////
+  } //for ->  else if (num_Win === 1) {
+} //for ->function update_Score(win, wrong) {
+
+//دالة التحقق من البطاقة المختاره
 function check(env) {
-  if (arr[0] === null) {
+  if (arr[0] === null && env.target.className === 'card') {
     arr[0] = env.target.firstElementChild;
     arr[0].parentElement.classList.add('open', 'show');
-  } else if (arr[1] === null) {
+  } else if (arr[1] === null && env.target.className === 'card') {
     arr[1] = env.target.firstElementChild;
-    if ((arr[0].className === arr[1].className) & arr[1].className != null) {
+    if ((arr[0].className === arr[1].className)) { //حالة تطابق البطائق
       arr[1].parentElement.classList.add('match');
       arr[0].parentElement.classList.add('match');
-      arr[0] = null; //
-      arr[1] = null; //
-    } else if (arr[1].className != null & arr[0].className != null) {
+      update_Score(1, 0);
+      arr[0] = null;
+      arr[1] = null;
+    } else {
       arr[1].parentElement.classList.add('wrong');
       arr[0].parentElement.classList.add('wrong');
+      update_Score(0, 1);
       setTimeout(function() {
         arr[1].parentElement.classList.remove('show', 'open', 'wrong');
         arr[0].parentElement.classList.remove('show', 'open', 'wrong');
         arr[0] = null; //
         arr[1] = null; //
       }, 1000);
-
     }
-
   }
-
 }
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -88,11 +112,14 @@ function check(env) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-refresh_Page();
-for (var i = 0; i < Shuffled.length; i++) {
-  Shuffled[i].parentElement.addEventListener('click', check);
-}
+////////////////////////////////////////////////////////////////////
+refresh_Page(); //نقوم بـ خلط الاوراق حالا بعد تحميل الصفحة
+// for (var i = 0; i < Shuffled.length; i++) {
+//   Shuffled[i].addEventListener('click', check);
+// }
+deck.addEventListener('click', check);
 let restart_Button = document.querySelector('.restart');
 restart_Button.addEventListener('click', function() {
-  refresh_Page();
+  window.location.reload();
 });
+////////////////////////////////////////////////////////////////////
