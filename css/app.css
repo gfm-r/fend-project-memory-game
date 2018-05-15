@@ -114,3 +114,7 @@ h1 {
   float: right;
   cursor: pointer;
 }
+
+.Timer {
+  background-color: red;
+}

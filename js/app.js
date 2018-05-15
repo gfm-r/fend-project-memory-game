@@ -1,9 +1,10 @@
 let arr = new Array(null, null);
 let moves = document.querySelector('.moves');
-let deck = document.querySelector(".deck");
+let deck = document.querySelector('.deck');
 let num_Wrong = 0;
 let num_Win = 0;
 let my_Stars = Array.from(document.querySelectorAll('.fa-star'));
+let my_Timer = document.querySelector('.Timer');
 /*
 arr[0]=اول بطاقة يتم الضغط عليها
 arr[1]=البطاقة الثانية التي يتم الضغط عليها
@@ -19,7 +20,7 @@ let diamond = 0,
   bomb = 0;
 /*
  * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
+ *   - shuffle the list of cards using the provided 'shuffle' method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
@@ -40,7 +41,7 @@ function shuffle(array) {
 //لنقوم بتحويل العناصر الناتجة من نوع Array.fromنستخدم الدالة
 //الى مصفوفة Element
 function refresh_Page() {
-  Shuffled = shuffle(Array.from(document.querySelectorAll(".card")));
+  Shuffled = shuffle(Array.from(document.querySelectorAll('.card')));
   //DOMبعد اعادة ترتيب البطائق نقوم بإضافتها الى الـ
   //فهي ليست موجودة بعد داخل الصفحة
   for (let i = 0; i < Shuffled.length; i++) {
@@ -62,13 +63,21 @@ function update_Score(win, wrong) {
     my_Stars[1].className = 'fa fa-star-half-o';
   else if (num_Wrong === 8)
     my_Stars[1].className = 'fa fa-star-o';
-  if (num_Win === 16) {
+  if (num_Wrong === 1) {
     ////////////swal-alert//////////////////////////
+    clearInterval(counterId);
+    let stars = 0;
+    if (num_Wrong <= 2)
+      stars = 3;
+    else if (num_Wrong <= 4)
+      stars = 2;
+    else
+      stars = 1;
     swal({
-      title: "Congratulation! You Won!",
-      text: "with " + moves.innerText + " Moves and Stars",
-      icon: "success",
-      button: "Play again!",
+      title: 'Congratulation! You Won!',
+      text: 'With ' + moves.innerText + ' Moves and ' + stars + ' Stars' + ' and spent ' + minute + ':' + second + ' playing :)',
+      icon: 'success',
+      button: 'Play again!',
     }).then(function() {
       window.location.reload();
     });
@@ -102,10 +111,30 @@ function check(env) {
     }
   }
 }
+
+
+//////////////////////////////////////////////////////////////////
+let minute = 0;
+let second = 0;
+
+function Timer() {
+  if (second < 60)
+    second++;
+  else {
+    second = 0;
+    minute++;
+  }
+  my_Timer.innerText = minute + ':' + second;
+
+}
+//////////////////////////////////////////////////////////////////
+
+
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of 'open' cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
  *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
@@ -122,4 +151,9 @@ let restart_Button = document.querySelector('.restart');
 restart_Button.addEventListener('click', function() {
   window.location.reload();
 });
+
+var counterId = setInterval(function() {
+  Timer();
+}, 1000);
+
 ////////////////////////////////////////////////////////////////////
