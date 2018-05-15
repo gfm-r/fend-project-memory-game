@@ -63,7 +63,7 @@ function update_Score(win, wrong) {
     my_Stars[1].className = 'fa fa-star-half-o';
   else if (num_Wrong === 8)
     my_Stars[1].className = 'fa fa-star-o';
-  if (num_Wrong === 1) {
+  if (num_Win === 8) {
     ////////////swal-alert//////////////////////////
     clearInterval(counterId);
     let stars = 0;
