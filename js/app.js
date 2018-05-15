@@ -111,8 +111,6 @@ function check(env) {
     }
   }
 }
-
-
 //////////////////////////////////////////////////////////////////
 let minute = 0;
 let second = 0;
@@ -128,9 +126,6 @@ function Timer() {
 
 }
 //////////////////////////////////////////////////////////////////
-
-
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -155,5 +150,4 @@ restart_Button.addEventListener('click', function() {
 var counterId = setInterval(function() {
   Timer();
 }, 1000);
-
 ////////////////////////////////////////////////////////////////////

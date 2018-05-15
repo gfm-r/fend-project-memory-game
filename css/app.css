@@ -84,7 +84,7 @@ h1 {
 
 .deck .card.wrong {
   cursor: default;
-  background: red;
+  background: rgb(230, 46, 37);
   font-size: 33px;
 }
 
@@ -116,5 +116,5 @@ h1 {
 }
 
 .Timer {
-  background-color: red;
+  background-color: rgb(230, 46, 37);
 }
