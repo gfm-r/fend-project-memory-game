@@ -18,3 +18,13 @@ For specific, detailed instructions, look at the project instructions in the [Ud
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## How to play the game
+Open the html file and start click on the cards.
+
+## Dependencies
+You don't have any dependencies to paly this game.
+
+
+## Screenshot
+![alt text](https://github.com/gfm-r/fend-project-memory-game/blob/master/img/Screen1.png) "screenshot"
