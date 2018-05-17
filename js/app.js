@@ -1,23 +1,10 @@
-let arr = new Array(null, null);
-let moves = document.querySelector('.moves');
-let deck = document.querySelector('.deck');
-let num_Wrong = 0;
-let num_Win = 0;
-let my_Stars = Array.from(document.querySelectorAll('.fa-star'));
-let my_Timer = document.querySelector('.Timer');
 /*
 arr[0]=اول بطاقة يتم الضغط عليها
 arr[1]=البطاقة الثانية التي يتم الضغط عليها
 */
-Shuffled = null; //shuffle متغير بداخلة المصفوفة الناتجة من
-let diamond = 0,
-  paper = 0,
-  anchor = 0,
-  bolt = 0,
-  cube = 0,
-  leaf = 0,
-  bicycle = 0,
-  bomb = 0;
+let arr = new Array(null, null);
+let deck = document.querySelector('.deck');
+let my_Timer = document.querySelector('.Timer');
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided 'shuffle' method below
@@ -41,7 +28,8 @@ function shuffle(array) {
 //لنقوم بتحويل العناصر الناتجة من نوع Array.fromنستخدم الدالة
 //الى مصفوفة Element
 function refresh_Page() {
-  Shuffled = shuffle(Array.from(document.querySelectorAll('.card')));
+  //shuffle متغير بداخلة المصفوفة الناتجة من
+  const Shuffled = shuffle(Array.from(document.querySelectorAll('.card')));
   //DOMبعد اعادة ترتيب البطائق نقوم بإضافتها الى الـ
   //فهي ليست موجودة بعد داخل الصفحة
   for (let i = 0; i < Shuffled.length; i++) {
@@ -49,6 +37,16 @@ function refresh_Page() {
   }
 }
 
+
+let moves = document.querySelector('.moves');
+let num_Wrong = 0; //عدد المحاولات الخاطئة
+let num_Win = 0; //عدد المحاولات الناجحة
+let my_Stars = Array.from(document.querySelectorAll('.fa-star'));
+/*
+دالة تحديث نتيجة اللاعب تستقبل هذه الدالة اما 0 او 1
+update_Score(1, 0)عند اختيار كرتين متطابقين نستدعي الدالة
+update_Score(0, 1)وعند اختيار كرتين غير متطابقين نستدعي الدالة
+*/
 function update_Score(win, wrong) {
   moves.innerText++;
   if (wrong)
@@ -65,7 +63,7 @@ function update_Score(win, wrong) {
     my_Stars[1].className = 'fa fa-star-o';
   if (num_Win === 8) {
     ////////////swal-alert//////////////////////////
-    clearInterval(counterId);
+    clearInterval(my_time); //إقاف تشغيل العداد
     let stars = 0;
     if (num_Wrong <= 2)
       stars = 3;
@@ -86,35 +84,41 @@ function update_Score(win, wrong) {
 } //for ->function update_Score(win, wrong) {
 
 //دالة التحقق من البطاقة المختاره
+/*
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of 'open' cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ */
 function check(env) {
   if (arr[0] === null && env.target.className === 'card') {
     arr[0] = env.target.firstElementChild;
-    arr[0].parentElement.classList.add('open', 'show');
+    arr[0].parentElement.classList.add('open', 'show', 'animated', 'pulse');
   } else if (arr[1] === null && env.target.className === 'card') {
     arr[1] = env.target.firstElementChild;
+    arr[0].parentElement.classList.remove('animated', 'pulse');
     if ((arr[0].className === arr[1].className)) { //حالة تطابق البطائق
-      arr[1].parentElement.classList.add('match');
-      arr[0].parentElement.classList.add('match');
+      arr[1].parentElement.classList.add('match', 'animated', 'bounceIn');
+      arr[0].parentElement.classList.add('match', 'animated', 'bounceIn');
       update_Score(1, 0);
       arr[0] = null;
       arr[1] = null;
     } else {
-      arr[1].parentElement.classList.add('wrong');
-      arr[0].parentElement.classList.add('wrong');
+      arr[1].parentElement.classList.add('wrong', 'animated', 'swing');
+      arr[0].parentElement.classList.add('wrong', 'animated', 'swing');
       update_Score(0, 1);
       setTimeout(function() {
-        arr[1].parentElement.classList.remove('show', 'open', 'wrong');
-        arr[0].parentElement.classList.remove('show', 'open', 'wrong');
+        arr[1].parentElement.classList.remove('show', 'open', 'wrong', 'animated', 'swing');
+        arr[0].parentElement.classList.remove('show', 'open', 'wrong', 'animated', 'swing');
         arr[0] = null; //
         arr[1] = null; //
       }, 1000);
     }
   }
 }
-//////////////////////////////////////////////////////////////////
+//////////////////////-Timer-///////////////////
 let minute = 0;
 let second = 0;
-
+//دالة حساب الوقت الذي امضاه الاعب
 function Timer() {
   if (second < 60)
     second++;
@@ -123,31 +127,16 @@ function Timer() {
     minute++;
   }
   my_Timer.innerText = minute + ':' + second;
-
 }
 //////////////////////////////////////////////////////////////////
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of 'open' cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-////////////////////////////////////////////////////////////////////
 refresh_Page(); //نقوم بـ خلط الاوراق حالا بعد تحميل الصفحة
-// for (var i = 0; i < Shuffled.length; i++) {
-//   Shuffled[i].addEventListener('click', check);
-// }
+// set up the event listener for a card. If a card is clicked:
 deck.addEventListener('click', check);
 let restart_Button = document.querySelector('.restart');
 restart_Button.addEventListener('click', function() {
   window.location.reload();
 });
-
-var counterId = setInterval(function() {
+//حساب وقت اللعب
+var my_time = setInterval(function() {
   Timer();
 }, 1000);
-////////////////////////////////////////////////////////////////////
